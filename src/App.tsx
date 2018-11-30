@@ -20,7 +20,7 @@ interface IAction {
 
 const history = createBrowserHistory();
 
-const defaultState= { score: 0, answers: [] }
+const defaultState = { score: 0, answers: [] }
 
 const reducer = (state:IAppState = defaultState, action:IAction) => {
   switch (action.type) {
@@ -28,6 +28,8 @@ const reducer = (state:IAppState = defaultState, action:IAction) => {
       return { ...state, score: state.score + 1 };
     case "REGISTER_ANSWER":
       return { ...state, answers: state.answers.concat([action.answer]) };
+    case "CLEAR":
+      return defaultState;
     default:
       return state;
   }
@@ -40,12 +42,11 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <Router history={history}>
-          <div>
+          <div className="App">
             <Route exact={true} path="/" component={Home} />
             <Route path="/home" component={Home} />
             <Route path="/quiz" component={Quiz} />
             <Route path="/results" component={Results} />
-            {/* <div onClick={history.goBack}>Back</div> */}
           </div>
         </Router>
       </Provider>

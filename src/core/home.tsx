@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import { connect } from "react-redux";
 import { history } from '../App';
 
 const goToQuiz = () => {
@@ -7,9 +6,11 @@ const goToQuiz = () => {
 }
 
 const Home = () => {
-    return <div>
-        <h2>Welcome to the Trivia Challenge!</h2>
-    <   div onClick={goToQuiz}>Begin</div>
+    return <div style={{}}>
+        <h3>Welcome to the Trivia Challenge!</h3>
+        <div style={{margin: "75px 0px"}}>You will be presented with 10 True or False questions.</div>
+        <div style={{margin: "75px 0px"}}>Can you Score 100%?</div>
+        <button style={{margin: "10px 0px"}} onClick={goToQuiz}>Begin</button>
     </div>
 }
 

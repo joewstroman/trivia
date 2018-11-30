@@ -1,28 +1,56 @@
-.App {
+#root {
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.App > div {
+  width: 300px;
+  background-color: rgb(245, 246, 255);
+  display: inline-block;
+  animation: slide-board-up .8s ease;
+  padding: 0px 55px;
+  -moz-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+  -webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+  transition: all 0.4s ease;
+  word-wrap: break-word;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
+button {
+  display:inline-block;
+  padding:0.35em 1.2em;
+  border:0.1em groove;
+  margin:0 0.3em 0.3em 0;
+  border-radius:0.12em;
+  box-sizing: border-box;
+  text-decoration:none;
+  font-weight:400;
+  color: black;
+  text-align:center;
+  margin: 5px 0px;
+  transition: all 0.3s;
+  background-color: white;
+  outline: none;
+ }
 
-.App-title {
-  font-size: 1.5em;
-}
+ button:hover {
+  background-color: rgb(142, 200, 214);
+ }
 
-.App-intro {
-  font-size: large;
-}
+ .question {
+  min-width: 200px;
+  height: 200px;
+  padding: 25px;
+  display: table-cell;
+  vertical-align: middle;
+  border: 1px solid;
+  border-color: rgb(170, 170, 170);
+ }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+@keyframes slide-board-up {
+  0% {
+      transform: translateY(300px);
+  }
+  100% {
+      transform: translateY(0);
+  }
 }

@@ -22,9 +22,9 @@ interface IQuizState {
 }
 
 interface IQuizProps {
-    addToScore: () => void
-    registerAnswer: (answer:[boolean, string]) => void
-    score: number;
+    addToScore: () => void;
+    clear: () => void;
+    registerAnswer: (answer:[boolean, string]) => void;
 }
 
 class QuizComponent extends React.Component<IQuizProps, IQuizState> {
@@ -34,6 +34,9 @@ class QuizComponent extends React.Component<IQuizProps, IQuizState> {
     }
 
     public async componentWillMount() {
+        // Clear the app state whenever a new quiz begins
+        this.props.clear();
+
         if (!__QUIZ_JSON) {
             __QUIZ_JSON = await (await __GET_QUESTIONS()).json();
         }
@@ -82,10 +85,10 @@ class QuizComponent extends React.Component<IQuizProps, IQuizState> {
 
         return (
             <div>
-                <div>{parseText(this.getItem(index).category)}</div>
-                <div>{parseText(this.getItem(index).question)}</div>
-                <div>{(this.state.currentQuestion) ? this.state.currentQuestion + 1 : 1} / {this.state.questions.length}</div>
-                <div>{this.renderButton('True')}{this.renderButton('False')}</div>
+                <h3>{parseText(this.getItem(index).category)}</h3>
+                <div className="question">{parseText(this.getItem(index).question)}</div>
+                <div style={{margin: "15px 0px"}}>{(this.state.currentQuestion) ? this.state.currentQuestion + 1 : 1} / {this.state.questions.length}</div>
+                <div style={{margin: "15px 0px"}}>{this.renderButton('True')}{this.renderButton('False')}</div>
             </div>
         );
     }
@@ -105,6 +108,7 @@ const mapStateToProps = () => {
 const mapDispatchToProps = (dispatch:any) => {
     return {
         addToScore: () => dispatch({ type: 'ADD_TO_SCORE'}),
+        clear: () => dispatch({ type: 'CLEAR'}),
         registerAnswer: (answer:[boolean, string]) => dispatch({ type: 'REGISTER_ANSWER', answer}) 
     };
 }
@@ -118,6 +122,7 @@ const query = async (url:string) => {
 
 // Fetch data without blocking, for fastest possible load
 // and process the call when the component mounts
+const __API_URL = 'https://opentdb.com/api.php?amount=10&difficulty=hard&type=boolean'
 
 const __GET_QUESTIONS = async () => {
     if (__QUIZ_API_PROMISE) {
@@ -127,13 +132,12 @@ const __GET_QUESTIONS = async () => {
     return __QUIZ_API_PROMISE = query(__API_URL);
 }
 
-const __API_URL = 'https://opentdb.com/api.php?amount=10&difficulty=hard&type=boolean'
 let __QUIZ_API_PROMISE:Promise<Response>;
 let __QUIZ_JSON:IQuizJson;
 __QUIZ_API_PROMISE = __GET_QUESTIONS();
 
 
-
+// Connect component to Redux Store
 const Quiz = connect(
     mapStateToProps,
     mapDispatchToProps
