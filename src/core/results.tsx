@@ -28,7 +28,7 @@ const renderQuestion = (answers:[boolean, string]) => {
 }
 
 const restart = () => {
-    history.push('/quiz');
+    history.push('/home');
 }
 
 const mapStateToProps = ({score, answers}: any) => {
