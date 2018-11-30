@@ -9,9 +9,9 @@ const results = ({ score, answers}: any) => {
     return (
         <div>
             <div>You Scored</div>
-            <div>{score} / {answers.length}</div>
+            <div style={{marginBottom: "10px"}}>{score} / {answers.length}</div>
             {answers.map(renderQuestion)}
-            <button onClick={restart}>Play Again?</button>
+            <button style={{marginBottom: "10px"}} onClick={restart}>Play Again?</button>
         </div>
     )
 }
@@ -21,7 +21,7 @@ const renderIcon = (correct:boolean) => {
     return <FontAwesomeIcon icon={icon} />
 }
 const renderQuestion = (answers:[boolean, string]) => {
-    return <div style={{textAlign: 'left', margin: '15px 0px'}}>
+    return <div key={answers[1]} style={{textAlign: 'left', margin: '15px 0px'}}>
     {renderIcon(answers[0])}
     <span style={{marginLeft: '8px'}}>{answers[1]}</span>
     </div>

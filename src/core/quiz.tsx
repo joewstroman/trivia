@@ -2,11 +2,6 @@ import * as React from 'react';
 import { connect } from "react-redux";
 import { history } from "../App";
 
-interface IQuizJson {
-    response_code: number;
-    results: IQuizItem[];
-}
-
 interface IQuizItem {
     category: string;
     type: string;
@@ -28,23 +23,28 @@ interface IQuizProps {
 }
 
 class QuizComponent extends React.Component<IQuizProps, IQuizState> {
+
     public constructor(props:IQuizProps) {
         super(props);
         this.state = { questions: [], currentQuestion: null };
+    }
+
+    public async componentDidMount() {
+        // Fetch new quiz data which will be cached
+        __GET_QUESTIONS(false);
     }
 
     public async componentWillMount() {
         // Clear the app state whenever a new quiz begins
         this.props.clear();
 
-        if (!__QUIZ_JSON) {
-            __QUIZ_JSON = await (await __GET_QUESTIONS()).json();
-        }
+        // Make a request to the global function to grab cached quiz data
+        const json = await (await __GET_QUESTIONS()).json();
 
-        if (__QUIZ_JSON.response_code === 0) {
-            this.setState({ ...this.state, ...{ questions: __QUIZ_JSON.results, currentQuestion: 0 }});
+        if (json.response_code === 0) {
+            this.setState({ ...this.state, ...{ questions: json.results, currentQuestion: 0 }});
         } else {
-            alert(`Response from ${__API_URL} is ${__QUIZ_JSON.response_code}`)
+            alert(`Response from ${__API_URL} is ${json.response_code}`)
         }
     }
 
@@ -58,10 +58,12 @@ class QuizComponent extends React.Component<IQuizProps, IQuizState> {
 
     private registerAnswer = (e:React.MouseEvent<HTMLButtonElement>) => {
         if (this.state.currentQuestion !== null) {
+            
             const answer = e.currentTarget.innerText;
             const item = this.getItem(this.state.currentQuestion);
             const correctAnswer = item.correct_answer;
             const answerIsCorrect = answer.toLowerCase() === correctAnswer.toLowerCase();
+            
             if (answerIsCorrect) {
                 this.props.addToScore();
             }
@@ -81,10 +83,10 @@ class QuizComponent extends React.Component<IQuizProps, IQuizState> {
         return <button onClick={this.registerAnswer}>{text}</button>
     }
 
-    private renderQuizItem(index:number) {
 
+    private renderQuizItem(index:number) {
         return (
-            <div>
+            <div className="quiz">
                 <h3>{parseText(this.getItem(index).category)}</h3>
                 <div className="question">{parseText(this.getItem(index).question)}</div>
                 <div style={{margin: "15px 0px"}}>{(this.state.currentQuestion) ? this.state.currentQuestion + 1 : 1} / {this.state.questions.length}</div>
@@ -123,9 +125,8 @@ const query = async (url:string) => {
 // Fetch data without blocking, for fastest possible load
 // and process the call when the component mounts
 const __API_URL = 'https://opentdb.com/api.php?amount=10&difficulty=hard&type=boolean'
-
-const __GET_QUESTIONS = async () => {
-    if (__QUIZ_API_PROMISE) {
+const __GET_QUESTIONS = async (cache = true) => {
+    if (cache && __QUIZ_API_PROMISE) {
         return __QUIZ_API_PROMISE;
     }
 
@@ -133,7 +134,6 @@ const __GET_QUESTIONS = async () => {
 }
 
 let __QUIZ_API_PROMISE:Promise<Response>;
-let __QUIZ_JSON:IQuizJson;
 __QUIZ_API_PROMISE = __GET_QUESTIONS();
 
 

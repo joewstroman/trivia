@@ -30,21 +30,48 @@ button {
   transition: all 0.3s;
   background-color: white;
   outline: none;
- }
+}
 
- button:hover {
+button:hover {
   background-color: rgb(142, 200, 214);
- }
+}
 
- .question {
-  min-width: 200px;
+.fade-enter {
+  opacity: 0.01;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0.01;
+  transition: opacity 500ms ease-in;
+}
+
+.question {
+  min-width: 250px;
   height: 200px;
   padding: 25px;
   display: table-cell;
   vertical-align: middle;
   border: 1px solid;
   border-color: rgb(170, 170, 170);
- }
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 @keyframes slide-board-up {
   0% {
