@@ -6,25 +6,28 @@ import { createStore } from "redux";
 import './App.css';
 import { Home } from "./core/home";
 import { Quiz } from "./core/quiz";
+import { Results } from "./core/results";
 
 interface IAppState {
-  value: number;
+  score: number;
+  answers: Array<[boolean, string]>;
 }
 
 interface IAction {
   type: string;
+  answer: [boolean, string]; 
 }
 
 const history = createBrowserHistory();
 
-const defaultState= { value: 0 }
+const defaultState= { score: 0, answers: [] }
 
 const reducer = (state:IAppState = defaultState, action:IAction) => {
   switch (action.type) {
-    case "INCREMENT":
-      return { ...state, ...{value: state.value + 1}};
-    case "DECREMENT":
-      return { ...state, ...{value: state.value - 1}};
+    case "ADD_TO_SCORE":
+      return { ...state, score: state.score + 1 };
+    case "REGISTER_ANSWER":
+      return { ...state, answers: state.answers.concat([action.answer]) };
     default:
       return state;
   }
@@ -41,7 +44,7 @@ class App extends React.Component {
             <Route exact={true} path="/" component={Home} />
             <Route path="/home" component={Home} />
             <Route path="/quiz" component={Quiz} />
-            {/* <Route path="/results" component={Connecter(Results)} */}
+            <Route path="/results" component={Results} />
             {/* <div onClick={history.goBack}>Back</div> */}
           </div>
         </Router>
