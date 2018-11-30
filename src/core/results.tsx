@@ -8,8 +8,8 @@ import { history } from "../App";
 const results = ({ score, answers}: any) => {
     return (
         <div>
-            <div>You Scored</div>
-            <div style={{marginBottom: "10px"}}>{score} / {answers.length}</div>
+            <h3 style={{marginBottom: "0px"}}>You Scored</h3>
+            <h3 style={{marginTop: "0px", marginBottom: "10px"}}>{score} / {answers.length}</h3>
             {answers.map(renderQuestion)}
             <button style={{marginBottom: "10px"}} onClick={restart}>Play Again?</button>
         </div>
